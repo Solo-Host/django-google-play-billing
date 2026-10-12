@@ -1,0 +1,66 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "django-google-play-billing"
+version = "0.1.0"
+description = "Django + Google Play subscription billing (purchase verification and Real-time Developer Notifications)"
+readme = "README.md"
+requires-python = ">=3.13"
+license = { text = "MIT" }
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Web Environment",
+  "Framework :: Django",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+  "Django>=5.0",
+  "google-api-python-client>=2.0",
+  "google-auth>=2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "bandit>=1.8",
+  "build>=1.2",
+  "mypy>=1.11",
+  "pip-audit>=2.9",
+  "pytest>=8.0",
+  "pytest-django>=4.8",
+  "ruff>=0.6",
+  "tox>=4.28",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["google_play_billing"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.settings"
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+"google_play_billing/migrations/*.py" = ["E501"]
+
+[tool.mypy]
+python_version = "3.13"
+exclude = ["^google_play_billing/migrations/"]
+show_error_codes = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = ["django", "django.*", "google", "google.*", "googleapiclient", "googleapiclient.*"]
+ignore_missing_imports = true
