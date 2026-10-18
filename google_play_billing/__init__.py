@@ -5,6 +5,7 @@ from typing import Any
 
 from . import signals
 from .client import GooglePlayAPI, build_android_publisher_service
+from .pricing import find_base_plan_price, money_to_decimal
 
 __version__ = "0.1.0"
 
@@ -28,6 +29,8 @@ def __getattr__(name: str) -> Any:
 __all__ = [
     "GooglePlayAPI",
     "build_android_publisher_service",
+    "find_base_plan_price",
+    "money_to_decimal",
     "ingest_pubsub_envelope",
     "sync_subscription_purchase",
     "PlaySubscriptionPurchase",

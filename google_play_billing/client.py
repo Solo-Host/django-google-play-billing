@@ -73,6 +73,28 @@ class GooglePlayAPI:
             raise PlayApiError("Unexpected subscription purchase response payload.")
         return result
 
+    def get_monetization_subscription(self, product_id: str) -> dict[str, Any]:
+        """Fetch the monetization Subscription (base plans + regional prices).
+
+        Returns the ``monetization.subscriptions.get`` resource, which exposes
+        each base plan's per-region list price. Used for cross-provider price
+        comparisons; it does not require a purchase token.
+        """
+        try:
+            request = (
+                self.service.monetization()
+                .subscriptions()
+                .get(packageName=self._package_name, productId=product_id)
+            )
+            result = request.execute()
+        except Exception as exc:  # noqa: BLE001 - surface any API failure uniformly
+            raise PlayApiError(
+                f"Failed to fetch monetization subscription {product_id}: {exc}"
+            ) from exc
+        if not isinstance(result, dict):
+            raise PlayApiError("Unexpected monetization subscription response payload.")
+        return result
+
     def acknowledge_subscription(self, purchase_token: str, product_id: str) -> None:
         """Acknowledge a subscription purchase (v1 acknowledge endpoint)."""
         try:

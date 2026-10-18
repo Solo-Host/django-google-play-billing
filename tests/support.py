@@ -85,6 +85,35 @@ def make_test_notification(*, package_name: str = "com.example.app") -> dict[str
     }
 
 
+def monetization_subscription(
+    *,
+    product_id: str = "personal_monthly",
+    base_plan_id: str = "monthly",
+    currency_code: str = "USD",
+    units: str = "4",
+    nanos: int = 990000000,
+) -> dict[str, Any]:
+    """Build a ``monetization.subscriptions.get`` style payload for tests."""
+    return {
+        "productId": product_id,
+        "basePlans": [
+            {
+                "basePlanId": base_plan_id,
+                "regionalConfigs": [
+                    {
+                        "regionCode": "US",
+                        "price": {
+                            "currencyCode": currency_code,
+                            "units": units,
+                            "nanos": nanos,
+                        },
+                    }
+                ],
+            }
+        ],
+    }
+
+
 def make_envelope(
     developer_notification: dict[str, Any],
     *,
@@ -110,13 +139,20 @@ class FakeGooglePlayAPI:
         payload: dict[str, Any] | None = None,
         *,
         package_name: str = "com.example.app",
+        monetization_payload: dict[str, Any] | None = None,
     ) -> None:
         self._payload = payload if payload is not None else subscription_v2()
+        self._monetization_payload = monetization_payload
         self.package_name = package_name
         self.acknowledged: list[tuple[str, str]] = []
 
     def get_subscription_v2(self, purchase_token: str) -> dict[str, Any]:
         return self._payload
+
+    def get_monetization_subscription(self, product_id: str) -> dict[str, Any]:
+        if self._monetization_payload is None:
+            return monetization_subscription(product_id=product_id)
+        return self._monetization_payload
 
     def acknowledge_subscription(self, purchase_token: str, product_id: str) -> None:
         self.acknowledged.append((purchase_token, product_id))
