@@ -7,7 +7,7 @@ from . import signals
 from .client import GooglePlayAPI, build_android_publisher_service
 from .pricing import find_base_plan_price, money_to_decimal
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 # Lazily exposed to avoid importing models before the Django app registry is ready.
 _LAZY_EXPORTS = {
