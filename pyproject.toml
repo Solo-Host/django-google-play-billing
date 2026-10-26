@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "django-google-play-billing"
-version = "0.1.0"
+version = "0.1.1"
 description = "Django + Google Play subscription billing (purchase verification and Real-time Developer Notifications)"
 readme = "README.md"
 requires-python = ">=3.13"
