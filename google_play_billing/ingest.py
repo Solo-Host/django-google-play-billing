@@ -174,7 +174,8 @@ def _handle_voided_purchase(
     notification: RealtimeNotification,
 ) -> None:
     voided = developer_notification.get("voidedPurchaseNotification")
-    purchase_token = ""
+    # Empty string signals that the notification did not include a purchase token.
+    purchase_token = ""  # nosec B105
     if isinstance(voided, Mapping):
         purchase_token = str(voided.get("purchaseToken") or "")
     if purchase_token:
@@ -259,7 +260,8 @@ def ingest_pubsub_envelope(
 
     subscription = developer_notification.get("subscriptionNotification")
     voided = developer_notification.get("voidedPurchaseNotification")
-    purchase_token = ""
+    # Empty string signals that the notification did not include a purchase token.
+    purchase_token = ""  # nosec B105
     product_id = ""
     notification_type: int | None = None
     if isinstance(subscription, Mapping):
